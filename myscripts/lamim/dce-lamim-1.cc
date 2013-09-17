@@ -24,6 +24,12 @@ using namespace std;
 
 NS_LOG_COMPONENT_DEFINE ("LamimExperiment");
 
+void
+TxVectorCallback (std::string path, WifiTxVector vector)
+{
+  NS_LOG_UNCOND ((Simulator::Now ()).GetSeconds () << " " <<  vector.GetMode().GetDataRate()/1000000  << " " << (int)vector.GetTxPowerLevel());
+}
+
 class ThroughputCounter
 {
 public:
@@ -205,7 +211,7 @@ int main (int argc, char *argv[])
 
   dce.SetBinary ("./lua");
   dce.ResetArguments ();
-  dce.AddArgument ("lupa/tests/test_lupa_ns3Apps_setfsm.lua");
+  dce.AddArgument ("fsm/setfsm_rate_loss.lua");
   apps = dce.Install (wifiApNodes.Get(0));
   apps.Start (Seconds (10.0));
 
@@ -226,6 +232,9 @@ int main (int argc, char *argv[])
     				MakeCallback (&ThroughputCounter::RxCallback, throughputCounter));
 
   throughputCounter->CheckThroughput();
+
+  Config::Connect ("/NodeList/0/DeviceList/*/$ns3::WifiNetDevice/RemoteStationManager/$ns3::RuleBasedWifiManager/DoGetDataTxVector",
+                                MakeCallback (&TxVectorCallback));
 
 
   // Calculate Throughput using Flowmonitor
