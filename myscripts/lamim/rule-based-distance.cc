@@ -24,6 +24,30 @@ using namespace std;
 
 NS_LOG_COMPONENT_DEFINE ("LamimExperiment");
 
+static void
+SetPosition (Ptr<Node> node, Vector position)
+{
+  Ptr<MobilityModel> mobility = node->GetObject<MobilityModel> ();
+  mobility->SetPosition (position);
+}
+
+static Vector
+GetPosition (Ptr<Node> node)
+{
+  Ptr<MobilityModel> mobility = node->GetObject<MobilityModel> ();
+  return mobility->GetPosition ();
+}
+
+static void
+AdvancePosition (Ptr<Node> node, int stepsSize, int stepsTime)
+{
+  Vector pos = GetPosition (node);
+  pos.x += stepsSize;
+  SetPosition (node, pos);
+  //std::cout << "x="<<pos.x << std::endl;
+  Simulator::Schedule (Seconds (stepsTime), &AdvancePosition, node, stepsSize, stepsTime);
+}
+
 void
 TxVectorCallback (std::string path, WifiTxVector vector)
 {
@@ -146,6 +170,8 @@ int main (int argc, char *argv[])
   mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
   mobility.Install (wifiApNodes.Get(0));
   mobility.Install (wifiStaNodes.Get(0));
+
+  Simulator::Schedule (Seconds (20), &AdvancePosition, wifiStaNodes.Get (0), 10, 20);
 
   InternetStackHelper stack;
   stack.Install (wifiApNodes);

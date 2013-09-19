@@ -15,4 +15,11 @@ def build(bld):
 #				  linkflags=['-L/usr/local/lib'],
 #				  lib=['foolib']
 				  )
+    bld.build_a_script('dce', needed = ['core', 'internet', 'dce', 'point-to-point', 'network', 'csma', 'mobility', 'wifi', 'applications', 'stats', 'flow-monitor'],
+          target='bin/rule-based-distance',
+          source=['rule-based-distance.cc'],
+#         linkflags=['-Wl,--dynamic-linker=' + linkerpath ]
+#         linkflags=['-L/usr/local/lib'],
+#         lib=['foolib']
+          )
 
