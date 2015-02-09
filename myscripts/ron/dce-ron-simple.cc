@@ -140,19 +140,19 @@ int main (int argc, char *argv[])
 
   dce.SetStackSize (1 << 20);
 
-  dce.SetBinary ("../lua");
+  dce.SetBinary ("../../lua-static/lua");
   dce.ResetArguments ();
   dce.AddArgument ("./rong-node.lua");
   apps = dce.Install (sensorNodes);
   apps.Start (Seconds (5.0));
 
-  dce.SetBinary ("../lua");
+  dce.SetBinary ("../../lua-static/lua");
   dce.ResetArguments ();
   dce.AddArgument ("./rong-node.lua");
   apps = dce.Install (schoolNodes);
   apps.Start (Seconds (5.0));
 
-  dce.SetBinary ("../lua");
+  dce.SetBinary ("../../lua-static/lua");
   dce.ResetArguments ();
   dce.AddArgument ("./rong-node.lua");
   apps = dce.Install (mobileNodes);
