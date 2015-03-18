@@ -6,3 +6,8 @@ build/
 ns3waf/__init__.pyc
 *.bak
 files-*/
+.lock-waf_linux2_build
+elf-cache/
+exitprocs
+wutils.pyc
+
