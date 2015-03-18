@@ -4,3 +4,5 @@
 .waf*
 build/
 ns3waf/__init__.pyc
+*.bak
+files-*/
