@@ -527,6 +527,9 @@ DCE (vsyslog)
 // SETJMP.H
 NATIVE (__sigsetjmp)
 NATIVE (siglongjmp)
+NATIVE (longjmp)
+NATIVE (setjmp)
+NATIVE (_setjmp)
 
 // LIBINTL.H
 NATIVE (bindtextdomain)
@@ -611,6 +614,7 @@ NATIVE (lrintl)
 NATIVE (llrintl)
 NATIVE (ceil)
 NATIVE (floor)
+NATIVET (double, pow)
 
 #undef DCE
 #undef DCET
