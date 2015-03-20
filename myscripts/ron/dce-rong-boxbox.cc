@@ -113,7 +113,7 @@ int main (int argc, char *argv[])
   mobility_rd1.Install (mobileNodes1);
 
   MobilityHelper mobility_rd2;
-  mobility_rd1.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
+  mobility_rd2.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
     "X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"),
     "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"));
   mobility_rd2.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
