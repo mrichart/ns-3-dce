@@ -173,6 +173,7 @@ int dce_select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
 
       if (event)
         {
+
           if (!CheckFdExists (current->process, fd, true))
             {
               current->err = EBADF;
@@ -180,6 +181,8 @@ int dce_select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
             }
           eventByFd[fd] = event;
         }
+
+
     }
   nfds = eventByFd.size ();
 

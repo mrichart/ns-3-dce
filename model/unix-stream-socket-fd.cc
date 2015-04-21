@@ -292,17 +292,21 @@ int
 UnixStreamSocketFd::Accept (struct sockaddr *my_addr, socklen_t *addrlen)
 {
   Thread *current = Current ();
-  NS_LOG_FUNCTION (this << current << my_addr << addrlen << GetRecvTimeout ());
+  NS_LOG_FUNCTION (this << current << my_addr << addrlen << m_statusFlags << GetRecvTimeout ());
   NS_ASSERT (current != 0);
 
   WaitQueueEntryTimeout *wq = 0;
 
   while (m_connectionQueue.empty ())
     {
+NS_LOG_DEBUG ("Accept: loop");
       if (m_statusFlags & O_NONBLOCK)
         {
+NS_LOG_DEBUG ("Accept: returning -1 #0");
           current->err = EWOULDBLOCK;
-          return -1;
+          //xop 
+          // podria ser RETURNFREE (-1); ???
+					return -1;
         }
 
       if (!wq)
@@ -321,12 +325,14 @@ UnixStreamSocketFd::Accept (struct sockaddr *my_addr, socklen_t *addrlen)
           break;
         case PollTable::INTERRUPTED:
           {
+NS_LOG_DEBUG ("Accept: returning -1 #1");
             UtilsDoSignal ();
             current->err = EINTR;
             RETURNFREE (-1);
           }
         case PollTable::TIMEOUT:
           {
+NS_LOG_DEBUG ("Accept: returning -1 #2");
             current->err = EAGAIN;
             RETURNFREE (-1);
           }
@@ -337,6 +343,7 @@ UnixStreamSocketFd::Accept (struct sockaddr *my_addr, socklen_t *addrlen)
   int fd = UtilsAllocateFd ();
   if (fd == -1)
     {
+      NS_LOG_DEBUG ("Accept: returning -1 #3");
       current->err = EMFILE;
       RETURNFREE (-1);
     }
@@ -350,6 +357,7 @@ UnixStreamSocketFd::Accept (struct sockaddr *my_addr, socklen_t *addrlen)
   socket->IncFdCount ();
   current->process->openFiles[fd] = new FileUsage (fd, socket);
 
+      NS_LOG_DEBUG ("Accept: returning fd:" << fd);
   RETURNFREE (fd);
 }
 bool
@@ -391,7 +399,7 @@ UnixStreamSocketFd::CanRecv (void) const
         }
       rx = m_socket->GetRxAvailable ();
     }
-  NS_LOG_FUNCTION (m_socket << m_state << rx << m_connectionQueue.empty () << " ret " << ret);
+  NS_LOG_FUNCTION (this << m_socket << m_state << rx << m_connectionQueue.empty () << " ret " << ret);
 
   return ret;
 }

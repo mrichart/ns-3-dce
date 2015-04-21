@@ -32,7 +32,7 @@
 #include <sstream>
 #include <fstream>
 
-NS_LOG_COMPONENT_DEFINE ("DceRonSimple");
+NS_LOG_COMPONENT_DEFINE ("DceRonBoxBox");
 
 using namespace ns3;
 using namespace std;
@@ -159,7 +159,7 @@ int main (int argc, char *argv[])
   apps = dce.Install (mobileNodes2);
   apps.Start (Seconds (4.0));
 
-  Simulator::Stop (Seconds (36000.0));
+  Simulator::Stop (Seconds (100000.0));
   Simulator::Run ();
   
   Simulator::Destroy ();

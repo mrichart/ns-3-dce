@@ -32,7 +32,7 @@
 #include <sstream>
 #include <fstream>
 
-NS_LOG_COMPONENT_DEFINE ("DceRonSimple");
+NS_LOG_COMPONENT_DEFINE ("DceLuaTest");
 
 using namespace ns3;
 using namespace std;
@@ -113,15 +113,15 @@ int main (int argc, char *argv[])
 
   dce.SetStackSize (1 << 20);
 
-  dce.SetBinary ("../lua");
+  dce.SetBinary ("../../lua-static/lua");
   dce.ResetArguments ();
-  dce.AddArgument ("./sender.lua");
+  dce.AddArgument ("../../utils/sender.lua");
   apps = dce.Install (nodes.Get(0));
-  apps.Start (Seconds (5.0));
+  apps.Start (Seconds (10.0));
   
-  dce.SetBinary ("../lua");
+  dce.SetBinary ("../../lua-static/lua");
   dce.ResetArguments ();
-  dce.AddArgument ("./receiver.lua");
+  dce.AddArgument ("../../utils/receiver.lua");
   apps = dce.Install (nodes.Get(1));
   apps.Start (Seconds (5.0));
 
