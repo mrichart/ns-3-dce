@@ -50,7 +50,7 @@ private:
 
   void MainSend (int *r, Ptr<Packet> p);
 
-  std::list<std::pair<Ptr<Socket>,Address> > m_connectionQueue;
+  std::list<std::pair<UnixStreamSocketFd*,Address> > m_connectionQueue;
   int m_backlog;
   State m_state;
   Address* m_peerAddress;

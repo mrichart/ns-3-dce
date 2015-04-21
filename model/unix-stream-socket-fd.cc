@@ -348,16 +348,15 @@ NS_LOG_DEBUG ("Accept: returning -1 #2");
       RETURNFREE (-1);
     }
 
-  Ptr<Socket> sock = m_connectionQueue.front ().first;
+  UnixStreamSocketFd *socket = m_connectionQueue.front ().first;
   Address ad = m_connectionQueue.front ().second;
   m_connectionQueue.pop_front ();
-  UnixStreamSocketFd *socket = new UnixStreamSocketFd (sock, true);
   Ns3AddressToPosixAddress (ad, my_addr, addrlen);
   socket->SetPeerAddress (new Address (ad));
   socket->IncFdCount ();
   current->process->openFiles[fd] = new FileUsage (fd, socket);
 
-      NS_LOG_DEBUG ("Accept: returning fd:" << fd);
+  NS_LOG_DEBUG ("Accept: returning fd:" << fd);
   RETURNFREE (fd);
 }
 bool
@@ -425,7 +424,9 @@ UnixStreamSocketFd::ConnectionCreated (Ptr<Socket> sock, const Address & from)
 {
   NS_LOG_FUNCTION (sock << from);
   NS_ASSERT (((int)m_connectionQueue.size ()) < m_backlog);
-  m_connectionQueue.push_back (std::make_pair (sock, from));
+  
+  UnixStreamSocketFd *socket = new UnixStreamSocketFd (sock, true);
+  m_connectionQueue.push_back (std::make_pair (socket, from));
 
   int pi = POLLIN;
   WakeWaiters (&pi);
