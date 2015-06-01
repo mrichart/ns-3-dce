@@ -40,7 +40,8 @@ using namespace std;
 int main (int argc, char *argv[])
 {
 
-  uint32_t nMobiles = 20;
+  //uint32_t nMobiles = 20;
+  uint32_t nMobiles = atoi(argv[1]);
 
   CommandLine cmd;
 
