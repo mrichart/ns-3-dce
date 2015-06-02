@@ -1,0 +1,15 @@
+## -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+import ns3waf
+import os
+
+def configure(conf):
+    ns3waf.check_modules(conf, ['core', 'network', 'dce', 'wifi', 'point-to-point', 'csma', 'mobility'], mandatory = True)
+
+def build(bld):
+    bld.build_a_script('dce-wireless-2', needed = ['core', 'network', 'dce', 'wifi', 'point-to-point', 'csma', 'mobility', 'flow-monitor', 'applications'],
+				  target='bin/dce-wireless-2', 
+				  source=['dce-wireless-2.cc'],
+				  )
+    bld.program(source='tcp-server-3.cc', target='../../bin_dce/tcp-server-3', cxxflags = [ '-fPIC'], linkflags = ['-pie', '-rdynamic'])
+    bld.program(source='tcp-client-3.cc', target='../../bin_dce/tcp-client-3', cxxflags = [ '-fPIC'], linkflags = ['-pie', '-rdynamic'])
