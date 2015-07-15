@@ -156,7 +156,7 @@ int main (int argc, char *argv[])
   apps = dce.Install (mobileNodes2);
   apps.Start (Seconds (1.0));
 
-  Simulator::Stop (Seconds (5000.0));
+  Simulator::Stop (Seconds (1000.0));
   Simulator::Run ();
   
   Simulator::Destroy ();
