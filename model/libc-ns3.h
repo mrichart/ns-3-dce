@@ -150,6 +150,7 @@ NATIVE (strsep)
 DCE    (setlocale)
 NATIVE_WITH_ALIAS (newlocale)
 NATIVE_WITH_ALIAS (uselocale)
+NATIVE (localeconv)
 
 // WCHAR.H
 NATIVE (wctob)
