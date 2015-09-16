@@ -102,19 +102,19 @@ int main (int argc, char *argv[])
   
   MobilityHelper mobility_rd1;
   mobility_rd1.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
-    "X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"),
-    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"));
+    "X", StringValue ("ns3::UniformRandomVariable[Min=-200.0|Max=0.0]"),
+    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=20.0]"));
   mobility_rd1.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
-    "Bounds", RectangleValue (Rectangle (-500.0, 0.0, 0.0, 20.0)),
+    "Bounds", RectangleValue (Rectangle (-200.0, 0.0, 0.0, 20.0)),
     "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
   mobility_rd1.Install (mobileNodes1);
 
   MobilityHelper mobility_rd2;
   mobility_rd2.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
-    "X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"),
-    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"));
+    "X", StringValue ("ns3::UniformRandomVariable[Min=20.0|Max=220.0]"),
+    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=20.0]"));
   mobility_rd2.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
-    "Bounds", RectangleValue (Rectangle (20.0, 520.0, 0.0, 20.0)),
+    "Bounds", RectangleValue (Rectangle (20.0, 220.0, 0.0, 20.0)),
     "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
   mobility_rd2.Install (mobileNodes2);
 
@@ -153,7 +153,7 @@ int main (int argc, char *argv[])
   dce.ResetArguments ();
   dce.AddArgument ("./rong-node.lua");
   apps = dce.Install (mobileNodes1);
-  apps = dce.Install (mobileNodes2);
+  //apps = dce.Install (mobileNodes2);
   apps.Start (Seconds (1.0));
 
   Simulator::Stop (Seconds (1000.0));
