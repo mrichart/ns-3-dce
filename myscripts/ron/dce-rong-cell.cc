@@ -94,11 +94,11 @@ int main (int argc, char *argv[])
   positionAlloc->Add (Vector (0.0, 0.0, 0.0));
   positionAlloc->Add (Vector (10.0, 0.0, 0.0));
 
-  positionAlloc->Add (Vector (330.0, 5.0, 0.0));
-  positionAlloc->Add (Vector (210.0, 10.0, 0.0));
-  positionAlloc->Add (Vector (220.0, 10.0, 0.0));
-  positionAlloc->Add (Vector (210.0, 0.0, 0.0));
-  positionAlloc->Add (Vector (220.0, 0.0, 0.0));
+  positionAlloc->Add (Vector (270.0, 5.0, 0.0));
+  positionAlloc->Add (Vector (160.0, 10.0, 0.0));
+  positionAlloc->Add (Vector (170.0, 10.0, 0.0));
+  positionAlloc->Add (Vector (160.0, 0.0, 0.0));
+  positionAlloc->Add (Vector (170.0, 0.0, 0.0));
 
   mobility_fixed.SetPositionAllocator (positionAlloc);
   mobility_fixed.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
@@ -107,10 +107,10 @@ int main (int argc, char *argv[])
   
   MobilityHelper mobility_rd1;
   mobility_rd1.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
-    "X", StringValue ("ns3::UniformRandomVariable[Min=10.0|Max=210.0]"),
+    "X", StringValue ("ns3::UniformRandomVariable[Min=10.0|Max=160.0]"),
     "Y", StringValue ("ns3::UniformRandomVariable[Min=-45.0|Max=55.0]"));
   mobility_rd1.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
-    "Bounds", RectangleValue (Rectangle (10.0, 210.0, -45.0, 55.0)),
+    "Bounds", RectangleValue (Rectangle (10.0, 160.0, -45.0, 55.0)),
     "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
   mobility_rd1.Install (mobileNodes1);
 
