@@ -45,7 +45,7 @@ int main (int argc, char *argv[])
   cmd.Parse (argc, argv);
 
   NodeContainer fixedNodes;
-  fixedNodes.Create(10);
+  fixedNodes.Create(9);
 
   NodeContainer mobileNodes1;
   mobileNodes1.Create (1);
@@ -68,7 +68,7 @@ int main (int argc, char *argv[])
 */
 
 ///*
-	Config::SetDefault( "ns3::RangePropagationLossModel::MaxRange", DoubleValue( 210.0 ) );
+	Config::SetDefault( "ns3::RangePropagationLossModel::MaxRange", DoubleValue( 160.0 ) );
 	YansWifiChannelHelper channelHelper;	
 	channelHelper.SetPropagationDelay( "ns3::ConstantSpeedPropagationDelayModel" );
 	channelHelper.AddPropagationLoss(  "ns3::RangePropagationLossModel" );
@@ -121,10 +121,10 @@ int main (int argc, char *argv[])
   
   MobilityHelper mobility_rd1;
   mobility_rd1.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
-    "X", StringValue ("ns3::UniformRandomVariable[Min=10.0|Max=160.0]"),
-    "Y", StringValue ("ns3::UniformRandomVariable[Min=-45.0|Max=55.0]"));
+    "X", StringValue ("ns3::UniformRandomVariable[Min=60.0|Max=110.0]"),
+    "Y", StringValue ("ns3::UniformRandomVariable[Min=-25.0|Max=35.0]"));
   mobility_rd1.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
-    "Bounds", RectangleValue (Rectangle (10.0, 160.0, -45.0, 55.0)),
+    "Bounds", RectangleValue (Rectangle (60.0, 110.0, -25.0, 35.0)),
     "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
   mobility_rd1.Install (mobileNodes1);
 
