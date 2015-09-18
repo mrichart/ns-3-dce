@@ -57,12 +57,26 @@ int main (int argc, char *argv[])
   /*Create a channel helper in a default working state. By default, we create a channel model with a 
   propagation speed equal to a constant, the speed of light, and a propagation loss based on a log 
   distance model with a reference loss of 46.6777 dB at reference distance of 1m.*/
-  
+
+
+/*  
   YansWifiChannelHelper channel = YansWifiChannelHelper::Default ();
   YansWifiPhyHelper phy = YansWifiPhyHelper::Default ();
   //phy.Set ("TxPowerEnd", DoubleValue (1.64) );
   //phy.Set ("TxPowerStart", DoubleValue (1.64) );
   phy.SetChannel (channel.Create ());  //All devices will use the same channel
+*/
+
+///*
+	Config::SetDefault( "ns3::RangePropagationLossModel::MaxRange", DoubleValue( 210.0 ) );
+	YansWifiChannelHelper channelHelper;	
+	channelHelper.SetPropagationDelay( "ns3::ConstantSpeedPropagationDelayModel" );
+	channelHelper.AddPropagationLoss(  "ns3::RangePropagationLossModel" );
+
+	YansWifiPhyHelper phyHelper = YansWifiPhyHelper::Default();
+	phyHelper.SetChannel( channelHelper.Create() );		
+//*/
+
 
   /*The default state is defined as being an Adhoc MAC layer with an ARF rate control algorithm and 
   both objects using their default attribute values. By default, configure MAC and PHY for 802.11a.*/
@@ -73,7 +87,7 @@ int main (int argc, char *argv[])
   
   mac.SetType ("ns3::AdhocWifiMac");
 
-  NetDeviceContainer allDevices = wifi.Install (phy, mac, allNodes);
+  NetDeviceContainer allDevices = wifi.Install (phyHelper, mac, allNodes);
 
   //set seed for random variables for models
   /*struct timeval tv;
