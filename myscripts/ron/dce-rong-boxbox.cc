@@ -66,11 +66,24 @@ int main (int argc, char *argv[])
   propagation speed equal to a constant, the speed of light, and a propagation loss based on a log 
   distance model with a reference loss of 46.6777 dB at reference distance of 1m.*/
   
+///*  
   YansWifiChannelHelper channel = YansWifiChannelHelper::Default ();
   YansWifiPhyHelper phy = YansWifiPhyHelper::Default ();
   //phy.Set ("TxPowerEnd", DoubleValue (1.64) );
   //phy.Set ("TxPowerStart", DoubleValue (1.64) );
   phy.SetChannel (channel.Create ());  //All devices will use the same channel
+//*/
+
+/*
+	Config::SetDefault( "ns3::RangePropagationLossModel::MaxRange", DoubleValue( 100.0 ) );
+	YansWifiChannelHelper channelHelper;	
+	channelHelper.SetPropagationDelay( "ns3::ConstantSpeedPropagationDelayModel" );
+	channelHelper.AddPropagationLoss(  "ns3::RangePropagationLossModel" );
+
+	YansWifiPhyHelper phy = YansWifiPhyHelper::Default();
+	phy.SetChannel( channelHelper.Create() );		
+*/
+
 
   /*The default state is defined as being an Adhoc MAC layer with an ARF rate control algorithm and 
   both objects using their default attribute values. By default, configure MAC and PHY for 802.11a.*/
@@ -84,21 +97,21 @@ int main (int argc, char *argv[])
   NetDeviceContainer allDevices = wifi.Install (phy, mac, allNodes);
 
   //set seed for random variables for models
-  /*struct timeval tv;
+  struct timeval tv;
   uint32_t curtime;
   gettimeofday(&tv, NULL); 
   curtime=(uint32_t)tv.tv_sec;
 
-  SeedManager::SetSeed(curtime);*/
+  SeedManager::SetSeed(curtime);
 
 
   //Set mobility model
 
   MobilityHelper mobility_fixed;
   Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-  positionAlloc->Add (Vector (0.0, 500.0, 0.0));
-  positionAlloc->Add (Vector (1000.0, 500.0, 0.0));
-  positionAlloc->Add (Vector (2000.0, 500.0, 0.0));
+  positionAlloc->Add (Vector (0.0, 200.0, 0.0));
+  positionAlloc->Add (Vector (400.0, 200.0, 0.0));
+  positionAlloc->Add (Vector (800.0, 200.0, 0.0));
   mobility_fixed.SetPositionAllocator (positionAlloc);
   mobility_fixed.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
   mobility_fixed.Install (sensorNodes);
@@ -106,19 +119,19 @@ int main (int argc, char *argv[])
   
   MobilityHelper mobility_rd1;
   mobility_rd1.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
-    "X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"),
-    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"));
+    "X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=400.0]"),
+    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=400.0]"));
   mobility_rd1.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
-    "Bounds", RectangleValue (Rectangle (0.0, 1000.0, 0.0, 1000.0)),
+    "Bounds", RectangleValue (Rectangle (0.0, 400.0, 0.0, 400.0)),
     "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
   mobility_rd1.Install (mobileNodes1);
 
   MobilityHelper mobility_rd2;
   mobility_rd2.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
-    "X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"),
-    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1000.0]"));
+    "X", StringValue ("ns3::UniformRandomVariable[Min=400.0|Max=800.0]"),
+    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=400.0]"));
   mobility_rd2.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
-    "Bounds", RectangleValue (Rectangle (1000.0, 2000.0, 0.0, 1000.0)),
+    "Bounds", RectangleValue (Rectangle (400.0, 800.0, 0.0, 400.0)),
     "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
   mobility_rd2.Install (mobileNodes2);
 
@@ -151,16 +164,17 @@ int main (int argc, char *argv[])
   dce.ResetArguments ();
   dce.AddArgument ("./rong-node.lua");
   apps = dce.Install (sensorNodes);
-  apps.Start (Seconds (5.0));
+  apps.Start (Seconds (4.0));
 
   dce.SetBinary ("../../lua-static/lua");
   dce.ResetArguments ();
   dce.AddArgument ("./rong-node.lua");
   apps = dce.Install (mobileNodes1);
+  apps.Start(Seconds (4.0));
   apps = dce.Install (mobileNodes2);
-  apps.Start (Seconds (4.0));
+  apps.Start(Seconds (4.0));
 
-  Simulator::Stop (Seconds (100000.0));
+  Simulator::Stop (Seconds (5000.0));
   Simulator::Run ();
   
   Simulator::Destroy ();
