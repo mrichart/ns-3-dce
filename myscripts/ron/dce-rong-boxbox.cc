@@ -110,8 +110,8 @@ int main (int argc, char *argv[])
   MobilityHelper mobility_fixed;
   Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
   positionAlloc->Add (Vector (0.0, 200.0, 0.0));
-  positionAlloc->Add (Vector (400.0, 200.0, 0.0));
-  positionAlloc->Add (Vector (800.0, 200.0, 0.0));
+  positionAlloc->Add (Vector (450.0, 200.0, 0.0));
+  positionAlloc->Add (Vector (900.0, 200.0, 0.0));
   mobility_fixed.SetPositionAllocator (positionAlloc);
   mobility_fixed.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
   mobility_fixed.Install (sensorNodes);
@@ -128,10 +128,10 @@ int main (int argc, char *argv[])
 
   MobilityHelper mobility_rd2;
   mobility_rd2.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
-    "X", StringValue ("ns3::UniformRandomVariable[Min=400.0|Max=800.0]"),
+    "X", StringValue ("ns3::UniformRandomVariable[Min=450.0|Max=900.0]"),
     "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=400.0]"));
   mobility_rd2.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
-    "Bounds", RectangleValue (Rectangle (400.0, 800.0, 0.0, 400.0)),
+    "Bounds", RectangleValue (Rectangle (450.0, 900.0, 0.0, 400.0)),
     "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
   mobility_rd2.Install (mobileNodes2);
 
@@ -174,7 +174,7 @@ int main (int argc, char *argv[])
   apps = dce.Install (mobileNodes2);
   apps.Start(Seconds (4.0));
 
-  Simulator::Stop (Seconds (5000.0));
+  Simulator::Stop (Seconds (6000.0));
   Simulator::Run ();
   
   Simulator::Destroy ();

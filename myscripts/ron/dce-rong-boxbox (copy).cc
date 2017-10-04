@@ -50,10 +50,17 @@ int main (int argc, char *argv[])
   cmd.Parse (argc, argv);
 
   NodeContainer sensorNodes;
-  sensorNodes.Create(30);
+  sensorNodes.Create(3);
+
+  NodeContainer mobileNodes1;
+  mobileNodes1.Create (nMobiles/2);
+  NodeContainer mobileNodes2;
+  mobileNodes2.Create (nMobiles/2);
 
   NodeContainer allNodes;
   allNodes.Add(sensorNodes);
+  allNodes.Add(mobileNodes1);
+  allNodes.Add(mobileNodes2);
 
   /*Create a channel helper in a default working state. By default, we create a channel model with a 
   propagation speed equal to a constant, the speed of light, and a propagation loss based on a log 
@@ -102,12 +109,32 @@ int main (int argc, char *argv[])
 
   MobilityHelper mobility_fixed;
   Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-  for (int i=0; i<30;i++) {
-    positionAlloc->Add (Vector (0.0, 10.0*i, 0.0));
-  }
+  positionAlloc->Add (Vector (0.0, 100.0, 0.0));
+  positionAlloc->Add (Vector (200.0, 100.0, 0.0));
+  positionAlloc->Add (Vector (400.0, 100.0, 0.0));
   mobility_fixed.SetPositionAllocator (positionAlloc);
   mobility_fixed.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
   mobility_fixed.Install (sensorNodes);
+
+  
+  MobilityHelper mobility_rd1;
+  mobility_rd1.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
+    "X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=400.0]"),
+    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=200.0]"));
+  mobility_rd1.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
+    "Bounds", RectangleValue (Rectangle (0.0, 200.0, 0.0, 200.0)),
+    "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
+  mobility_rd1.Install (mobileNodes1);
+
+  MobilityHelper mobility_rd2;
+  mobility_rd2.SetPositionAllocator ("ns3::RandomRectanglePositionAllocator",
+    "X", StringValue ("ns3::UniformRandomVariable[Min=400.0|Max=800.0]"),
+    "Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=200.0]"));
+  mobility_rd2.SetMobilityModel ("ns3::RandomDirection2dMobilityModel", 
+    "Bounds", RectangleValue (Rectangle (200.0, 400.0, 0.0, 200.0)),
+    "Speed", StringValue ("ns3::UniformRandomVariable[Min=1.0|Max=2.0]"));
+  mobility_rd2.Install (mobileNodes2);
+
 
   Ipv4StaticRoutingHelper staticRouting;
 
@@ -138,6 +165,14 @@ int main (int argc, char *argv[])
   dce.AddArgument ("./rong-node.lua");
   apps = dce.Install (sensorNodes);
   apps.Start (Seconds (4.0));
+
+  dce.SetBinary ("../../lua-static/lua");
+  dce.ResetArguments ();
+  dce.AddArgument ("./rong-node.lua");
+  apps = dce.Install (mobileNodes1);
+  apps.Start(Seconds (4.0));
+  apps = dce.Install (mobileNodes2);
+  apps.Start(Seconds (4.0));
 
   Simulator::Stop (Seconds (5000.0));
   Simulator::Run ();
